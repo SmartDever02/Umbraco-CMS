@@ -60,7 +60,7 @@ export class UmbPropertyEditorUIContentPickerElement
 	private _maxMessage = '';
 
 	@state()
-	private _allowedContentTypeUniques?: string | null;
+	private _allowedContentTypeUniques?: string[];
 
 	@state()
 	private _rootUnique?: string | null;
@@ -117,7 +117,7 @@ export class UmbPropertyEditorUIContentPickerElement
 		this._min = this.#parseInt(config.getValueByAlias('minNumber'), 0);
 		this._max = this.#parseInt(config.getValueByAlias('maxNumber'), Infinity);
 
-		this._allowedContentTypeUniques = config.getValueByAlias('filter');
+		this._allowedContentTypeUniques = config.getValueByAlias<string>('filter')?.split(',').filter(id => id.trim()) ?? [];
 
 		this._minMessage = `${this.localize.term('validation_minCount')} ${this._min} ${this.localize.term('validation_items')}`;
 		this._maxMessage = `${this.localize.term('validation_maxCount')} ${this._max} ${this.localize.term('validation_itemsSelected')}`;
@@ -204,7 +204,7 @@ export class UmbPropertyEditorUIContentPickerElement
 				.max=${this._max}
 				.maxMessage=${this._maxMessage}
 				.startNode=${startNode}
-				.allowedContentTypeIds=${this._allowedContentTypeUniques ?? ''}
+				.allowedContentTypeIds=${this._allowedContentTypeUniques ?? []}
 				?readonly=${this.readonly}
 				?required=${this.mandatory}
 				.requiredMessage=${this.mandatoryMessage}
